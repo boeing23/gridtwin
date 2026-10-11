@@ -1,8 +1,27 @@
 # GridTwin
 
-A digital twin of an AI-training data center's power chain, a model that predicts its grid draw, and a scheduler-plus-battery controller that flattens that draw.
+Unlock the power your AI data center already paid for.
 
-AI training makes a site's power swing every ~10 s as GPUs alternate between computing and syncing, and jump by megawatts when large jobs start or stop. Transformers, switchgear, grid contracts and demand charges are all sized and billed on those peaks. GridTwin simulates the whole site second by second, predicts the draw, and shows how much of the peak can be removed.
+## What we built
+
+- **A digital twin** of an AI-training data center's power chain, from the 13.8 kV grid feed down to the GPUs, simulated every second for 24 hours with measured H100 power traces.
+- **A predictor** that forecasts the site's grid draw from 1 second to 4 hours ahead.
+- **A controller** that flattens that draw: a power-aware job scheduler plus the site's existing battery.
+
+AI training makes a site's power swing every ~10 s as GPUs alternate between computing and syncing, and jump by megawatts when large jobs start or stop. Transformers, switchgear, grid contracts and demand charges are all sized and billed on those peaks. GridTwin shows how much of the peak can be removed, and what that's worth.
+
+## Who it's for
+
+- **Operators of small and mid-size AI data centers** (colocation sites, GPU clouds, AI training clusters, roughly 1–50 MW) who are paying for grid capacity sized for spikes they rarely hit.
+- Their **CFO or head of facilities**, who sees the result two ways: lower demand charges, and room for more GPUs on the power the site already has, without waiting years for a grid upgrade.
+
+## How it works, in short
+
+1. **Simulate:** the twin replays real GPU power traces for every job on the cluster and pushes the total through every device on the site's one-line (converters, buses, transformer, feeds) and the cooling plant. Its output is what the utility meter would see.
+2. **Predict:** the scheduler already knows what's running, what's queued and how long jobs asked for. GridTwin turns that into a forecast of power at the meter, and adds a short-term model for the ~10 s training swing.
+3. **Flatten:** using the forecast, the scheduler stops jobs from stacking past a power cap, and the battery smooths what's left and shaves the peak.
+
+Details are under [How it works](#how-it-works) below.
 
 ![Billed 30-minute grid draw by scenario](results/figures/billing30_light.png)
 
