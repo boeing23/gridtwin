@@ -1,0 +1,8 @@
+# generated data (rebuild with scripts/run_all.sh)
+data/
+results/resA.json
+results/resB.json
+*.asv
+__pycache__/
+.DS_Store
+octave-workspace
